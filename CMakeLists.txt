@@ -58,6 +58,23 @@ set_target_properties(BubbleDemo PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+# 多核编译
+if(WIN32)
+    if(MSVC)
+        add_compile_options(/MP${N})
+        message("--->MSVC")
+    elseif(MINGW)
+        set(CMAKE_MAKE_PROGRAM "${CMAKE_MAKE_PROGRAM} -j${N}")
+    endif()
+elseif(UNIX)
+    add_compile_options(-j${N})
+endif()
+
+# 采用 MSVC 终端上的中文不乱码
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
+    add_compile_options(/source-charset:utf-8 /execution-charset:utf-8)
+endif()
 install(TARGETS BubbleDemo
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

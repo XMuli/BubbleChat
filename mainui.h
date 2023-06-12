@@ -1,4 +1,4 @@
-#ifndef MAINUI_H
+﻿#ifndef MAINUI_H
 #define MAINUI_H
 
 #include <QPointer>
@@ -21,7 +21,6 @@ public:
     ~MainUI();
 
 private slots:
-
     void on_btnSend_released();
     void on_btnGenerate_released();
     void on_btnGenerate_pressed();
@@ -29,7 +28,6 @@ private slots:
 
 private:
     void initUI();
-
 
 private:
     Ui::MainUI *ui;

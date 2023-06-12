@@ -1,4 +1,4 @@
-#include "mainui.h"
+﻿#include "mainui.h"
 #include "ui_mainui.h"
 #include <QDebug>
 #include <QChar>
@@ -45,17 +45,13 @@ void MainUI::on_btnSend_released()
 
 void MainUI::on_btnGenerate_released()
 {
-    // 停止定时器
     m_timer->stop();
-
-    // 清空或重置 generatedText
     m_text.clear();
 }
 
 
 void MainUI::on_btnGenerate_pressed()
 {
-    // 启动定时器
     m_timer->start(100);  // 每100毫秒生成一次文字
 }
 
@@ -64,8 +60,7 @@ void MainUI::initUI()
     // 消息记录控件的切换************************************************
     m_bubbleHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
-    m_bubbleHistory->addBubble(BubbleParas("当然可以！下面是一篇稍长一点的介绍：\n\n人aqwer", BUBBLE_ROLE::BR_ME));
-
+    m_bubbleHistory->addBubble(BubbleParas("当然可以！下面是一篇稍长一点的介绍：\n\n人aqwer", BUBBLE_ROLE::BR_AICHAT));
     m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
     m_bubbleHistory->addBubble(BubbleParas("哈哈哈，随便写的几个，验证气泡的宽度", BUBBLE_ROLE::BR_AICHAT));
 
@@ -83,8 +78,10 @@ void MainUI::initUI()
         //       m_bubbleHistory->hide();
     }
 
+
     ui->btnGenerate->setToolTip("按下自动生成回答，松开停止回答");
     ui->btnSend->setToolTip("松开发送消息；直接在输入框按下回车也直接发送消息");
+    setWindowTitle("BubbleDemo");
 }
 
 void MainUI::onGenerateText()
@@ -102,7 +99,6 @@ void MainUI::onGenerateText()
     }
 
     m_text = randomText;
-
     m_bubbleHistory->appendLastBubbleText(m_text);
 }
 

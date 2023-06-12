@@ -1,4 +1,4 @@
-#ifndef BUBBLEHISTORY_H
+﻿#ifndef BUBBLEHISTORY_H
 #define BUBBLEHISTORY_H
 
 #include <QListWidget>

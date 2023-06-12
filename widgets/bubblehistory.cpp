@@ -1,4 +1,4 @@
-#include "bubblehistory.h"
+﻿#include "bubblehistory.h"
 #include <QListWidgetItem>
 #include <QDebug>
 

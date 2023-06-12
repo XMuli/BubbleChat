@@ -1,4 +1,4 @@
-#ifndef BUBBLE_H
+﻿#ifndef BUBBLE_H
 #define BUBBLE_H
 
 #include <QWidget>

@@ -1,4 +1,4 @@
-#include "bubble.h"
+﻿#include "bubble.h"
 #include "ui_bubble.h"
 #include <QDebug>
 #include <QPalette>
