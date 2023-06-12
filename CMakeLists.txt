@@ -14,6 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
 
+
     widgets/chatinputedit.h
     widgets/chatinputedit.cpp
 #    widgets/chatbubble.h
@@ -33,9 +34,7 @@ set(PROJECT_SOURCES
     mainui.cpp
     mainui.ui
 
-#    widget.cpp
-#    widget.h
-#    widget.ui
+    resources.qrc
 )
 
 set(_src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）

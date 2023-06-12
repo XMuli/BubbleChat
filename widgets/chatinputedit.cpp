@@ -14,7 +14,7 @@ void ChatInputEdit::keyReleaseEvent(QKeyEvent *event)
         event->ignore(); // 屏蔽 enter/return 按键
 
         emit sigSendBtnReleased();
-        qDebug() << "ChatInputPlainTextEdit: emit sigSendBtnReleased()!";
+//        qDebug() << "ChatInputPlainTextEdit: emit sigSendBtnReleased()!";
         return;
     }
 

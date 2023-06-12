@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/avatar/avatar.png</file>
+        <file>resources/avatar/avatar2.png</file>
+        <file>resources/avatar/ChatGPT.png</file>
+        <file>resources/avatar/chatgpt3.5.png</file>
+        <file>resources/avatar/openai.svg</file>
+        <file>resources/icons/annexes.svg</file>
+        <file>resources/icons/annexes_added.svg</file>
+        <file>resources/icons/cancel.svg</file>
+        <file>resources/icons/chats.svg</file>
+        <file>resources/icons/connect.svg</file>
+        <file>resources/icons/connect_blue.svg</file>
+        <file>resources/icons/connect_type.svg</file>
+        <file>resources/icons/detection.svg</file>
+        <file>resources/icons/disconnect.svg</file>
+        <file>resources/icons/edit.svg</file>
+        <file>resources/icons/editor.svg</file>
+        <file>resources/icons/emoji.svg</file>
+        <file>resources/icons/groups.svg</file>
+        <file>resources/icons/hor_split_screen.svg</file>
+        <file>resources/icons/language.svg</file>
+        <file>resources/icons/list.svg</file>
+        <file>resources/icons/microphone.svg</file>
+        <file>resources/icons/network.svg</file>
+        <file>resources/icons/pause.svg</file>
+        <file>resources/icons/play.svg</file>
+        <file>resources/icons/send.svg</file>
+        <file>resources/icons/setting.svg</file>
+        <file>resources/icons/sliding_bottom.svg</file>
+        <file>resources/icons/sound_black.svg</file>
+        <file>resources/icons/sound_red.svg</file>
+        <file>resources/icons/sound_wave.svg</file>
+        <file>resources/icons/speaker.svg</file>
+        <file>resources/icons/speech_black.svg</file>
+        <file>resources/icons/speech_red.svg</file>
+        <file>resources/icons/statistics.svg</file>
+        <file>resources/icons/stop_black.svg</file>
+        <file>resources/icons/stop_generate_black.svg</file>
+        <file>resources/icons/stop_generate_red.svg</file>
+        <file>resources/icons/stop_red.svg</file>
+        <file>resources/icons/ver_split_screen.svg</file>
+    </qresource>
+</RCC>
