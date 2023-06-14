@@ -75,9 +75,9 @@ void Bubble::setName(const QString &name)
 {
     QString t = "";
     if (m_role == BUBBLE_ROLE::BR_AICHAT) {
-        t = "ChatGPT";
+        t = "AI";
     } else {
-        t = name.isEmpty() ? "Venn" : name;
+        t = name.isEmpty() ? "User" : name;
     }
 
     ui->labName->setText(t);
@@ -88,7 +88,7 @@ void Bubble::setPhoto()
     auto& labPhoto = ui->labPhoto;/*
     labPhoto->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);*/
 
-    const QString& path = m_role == BUBBLE_ROLE::BR_AICHAT ? ":/resources/avatar/chatgpt3.5.png" : ":/resources/avatar/avatar.png";
+    const QString& path = m_role == BUBBLE_ROLE::BR_AICHAT ? ":/resources/avatar/openai.svg" : ":/resources/avatar/avatar.png";
     const QPixmap *pixmap = new QPixmap(path);
     labPhoto->setPixmap(*pixmap);
 }

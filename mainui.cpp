@@ -79,6 +79,8 @@ void MainUI::initUI()
     }
 
 
+    m_bubbleHistory->scrollToBottom();
+
     ui->btnGenerate->setToolTip("按下自动生成回答，松开停止回答");
     ui->btnSend->setToolTip("松开发送消息；直接在输入框按下回车也直接发送消息");
     setWindowTitle("BubbleDemo");

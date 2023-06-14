@@ -57,8 +57,6 @@ protected:
 private:
     Ui::Bubble *ui;
     BUBBLE_ROLE m_role;
-
-
 };
 
 #endif // BUBBLE_H
