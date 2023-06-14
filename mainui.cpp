@@ -86,10 +86,10 @@ void MainUI::initUI()
 
 void MainUI::onGenerateText()
 {
-    QString characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    QString characters = "\nABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     QRandomGenerator generator;
     generator.seed(QRandomGenerator::global()->generate());
-    int length = generator.bounded(3, 6); // 生成长度为3到5的随机数
+    int length = generator.bounded(10, 20); // 生成长度为3到5的随机数
     QString randomText;
 
     for (int i = 0; i < length; ++i) {
@@ -97,6 +97,7 @@ void MainUI::onGenerateText()
         QChar randomChar = characters.at(index);
         randomText.append(randomChar);
     }
+//    randomText += "\n";
 
     m_text = randomText;
     m_bubbleHistory->appendLastBubbleText(m_text);

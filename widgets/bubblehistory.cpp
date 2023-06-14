@@ -3,6 +3,7 @@
 #include <QDebug>
 
 BubbleHistory::BubbleHistory(QWidget *parent)
+    : QListWidget(parent)
 {
     initUI();
 }
@@ -11,12 +12,16 @@ void BubbleHistory::addBubble(const BubbleParas& paras)
 {
     Bubble *bubble = new Bubble(paras.text, paras.role, paras.time, this);
 
+
     qDebug () << "addBubble（） -> bubble:" << bubble << "  this:" << this;
 
     QListWidgetItem *item = new QListWidgetItem(this);
     item->setSizeHint(bubble->sizeHint());
     addItem(item);
     setItemWidget(item, bubble);
+
+    QListWidget::updateGeometry();
+    scrollToBottom();
 }
 
 void BubbleHistory::setLastBubbleText(const QString &text, const QDateTime &time)
@@ -39,6 +44,9 @@ void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &t
     } else if (bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
         bubble->appendText(text); // update text
     }
+
+    QListWidget::updateGeometry();
+    scrollToBottom();
 }
 
 Bubble *BubbleHistory::lastBubble()
@@ -57,5 +65,6 @@ void BubbleHistory::initUI()
 {
     // 设置样式表禁用悬浮高亮效果
 //    setStyleSheet("QListWidget::item:hover { background-color: transparent; }");
-    resize(1200, 760);
+//    resize(1200, 760);
+    setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Minimum);
 }

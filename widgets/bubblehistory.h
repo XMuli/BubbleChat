@@ -4,7 +4,9 @@
 #include <QListWidget>
 #include <QDateTime>
 #include <QString>
+#include <QBoxLayout>
 #include "bubble.h"
+
 
 class BubbleHistory : public QListWidget
 {
