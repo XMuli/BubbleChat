@@ -4,6 +4,8 @@
 #include <QPalette>
 #include <QTextLayout>
 #include <QTextOption>
+#include <QTextDocument>
+#include <QScrollBar>
 
 Bubble::Bubble(BUBBLE_ROLE role, QWidget *parent)
     : QWidget(parent)
@@ -39,28 +41,28 @@ void Bubble::setText(const QString &text)
     auto& bubble = ui->browerText;
     bubble->setText(text);
 
-    QFontMetricsF fm(this->font());
-    int maxWidth = bubble->viewport()->width();
+//    QFontMetricsF fm(this->font());
+//    int maxWidth = bubble->viewport()->width();
 //    qDebug() << "**********1>maxWidth:" << maxWidth;
-    const QWidget* parent = this->nativeParentWidget();  // 可以调整
-    if (parent) {
-        maxWidth = parent->width() - 170;
+//    const QWidget* parent = this->nativeParentWidget();  // 可以调整
+//    if (parent) {
+//        maxWidth = parent->width() - 170;
 //        qDebug() << "**********2>maxWidth:" << maxWidth;
-    }
+//    }
 
-    int allRowCount = 0;
-    int i = 1;
-    for (const QString& line : text.split('\n')) {
-        int lineWidth = fm.horizontalAdvance(line);
-        int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
-        allRowCount += realRowCount;
-//        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
-    }
+//    int allRowCount = 0;
+//    int i = 1;
+//    for (const QString& line : text.split('\n')) {
+//        int lineWidth = fm.horizontalAdvance(line);
+//        int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
+//        allRowCount += realRowCount;
+////        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
+//    }
 
-    const double lineHeight = fm.lineSpacing();
-    const QMargins margins(0, 5, 0, 5);
-//    maxWidth + margins.left() + margins.right(),  宽度
-    bubble->setFixedHeight(lineHeight * allRowCount + margins.top() + margins.bottom());
+//    const double lineHeight = fm.lineSpacing();
+//    const QMargins margins(0, 5, 0, 5);
+////    maxWidth + margins.left() + margins.right(),  宽度
+//    bubble->setFixedHeight(lineHeight * allRowCount + margins.top() + margins.bottom());
 }
 
 void Bubble::appendText(const QString &text)
@@ -114,7 +116,7 @@ void Bubble::autoRoleBtn()
         ui->tbEditor->setVisible(true);
         ui->tbStopGenerate->setVisible(false);
         ui->tbPlayAudio->setVisible(false);
-//        setWidgetBackgroundColor(this, QColor("#5381ff"));
+//        setWidgetBackgroundColor(this, QColor("#e9e9e8"));
     } else if (m_role == BUBBLE_ROLE::BR_AICHAT) {
         ui->tbEditor->setVisible(false);
         ui->tbStopGenerate->setVisible(true);
@@ -132,9 +134,45 @@ void Bubble::autoRoleBtn()
 void Bubble::initUI()
 {
     autoRoleBtn();
+    auto& browerText = ui->browerText;
+    browerText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    browerText->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    browerText->setLineWrapMode(QTextEdit::WidgetWidth);
 
-    ui->browerText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->browerText->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    connect(browerText->document(), &QTextDocument::contentsChanged, [browerText, this](){
+
+        const auto& scrollBar = browerText->verticalScrollBar();
+        const auto& text = browerText->document()->toPlainText();
+
+        QFontMetricsF fm(browerText->font());
+        int maxWidth  = browerText->viewport()->width();
+            qDebug() << "**********1>maxWidth:" << maxWidth;
+            const QWidget* parent = this->nativeParentWidget();  // 可以调整
+            if (parent) {
+                maxWidth = parent->width() - 170;
+                qDebug() << "**********2>maxWidth:" << maxWidth;
+            }
+
+            int allRowCount = 0;
+            int i = 1;
+            for (const QString& line : text.split('\n')) {
+                int lineWidth = fm.horizontalAdvance(line);
+                int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
+                allRowCount += realRowCount;
+        //        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
+            }
+
+            const double lineHeight = fm.lineSpacing();
+//            const QMargins margins(0, 5, 0, 5);
+        //    maxWidth + margins.left() + margins.right(),  宽度
+
+        int height = scrollBar->maximum() - scrollBar->minimum() + lineHeight * allRowCount/*scrollBar->pageStep()*/;
+
+        qDebug() << "-----@1---->max:" << scrollBar->maximum() << "  min:" << scrollBar->maximum() << "  pageStep:" << scrollBar->pageStep() << height;
+        ui->browerText->setFixedHeight(height);
+        qDebug() << "-----@2---->browerText size:" << ui->browerText->size() << ui->browerText->document()->toPlainText();
+    });
+
 }
 
 void Bubble::setWidgetBackgroundColor(QWidget *widget, const QColor &color)
@@ -151,13 +189,6 @@ void Bubble::setWidgetBackgroundColor(QWidget *widget, const QColor &color)
     // 递归设置子控件的背景色
     for (auto& childWidget : widget->findChildren<QWidget *>())
         setWidgetBackgroundColor(childWidget, color);
-}
-
-void Bubble::resizeEvent(QResizeEvent *event)
-{
-    auto& bubble = ui->browerText;
-    setText(bubble->toPlainText());  // 手动刷新
-    QWidget::resizeEvent(event);
 }
 
 BUBBLE_ROLE Bubble::role() const

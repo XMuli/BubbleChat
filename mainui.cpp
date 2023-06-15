@@ -58,11 +58,11 @@ void MainUI::on_btnGenerate_pressed()
 void MainUI::initUI()
 {
     // 消息记录控件的切换************************************************
-    m_bubbleHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+//    m_bubbleHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
     m_bubbleHistory->addBubble(BubbleParas("当然可以！下面是一篇稍长一点的介绍：\n\n人aqwer", BUBBLE_ROLE::BR_AICHAT));
-    m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
-    m_bubbleHistory->addBubble(BubbleParas("哈哈哈，随便写的几个，验证气泡的宽度", BUBBLE_ROLE::BR_AICHAT));
+//    m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
+//    m_bubbleHistory->addBubble(BubbleParas("哈哈哈，随便写的几个，验证气泡的宽度", BUBBLE_ROLE::BR_AICHAT));
 
 //    m_bubbleHistory->show();
     ui->editChatHistory->show();
@@ -84,6 +84,11 @@ void MainUI::initUI()
     ui->btnGenerate->setToolTip("按下自动生成回答，松开停止回答");
     ui->btnSend->setToolTip("松开发送消息；直接在输入框按下回车也直接发送消息");
     setWindowTitle("BubbleDemo");
+
+    ui->splitter->setStretchFactor(0, 9);
+    ui->splitter->setStretchFactor(1, 2);
+
+    resize(1200, 800);
 }
 
 void MainUI::onGenerateText()
@@ -103,5 +108,12 @@ void MainUI::onGenerateText()
 
     m_text = randomText;
     m_bubbleHistory->appendLastBubbleText(m_text);
+}
+
+
+
+void MainUI::on_btnGenerate_clicked()
+{
+
 }
 

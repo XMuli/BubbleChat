@@ -51,9 +51,6 @@ private:
     void initUI();
     void setWidgetBackgroundColor(QWidget *widget, const QColor &color);
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
 private:
     Ui::Bubble *ui;
     BUBBLE_ROLE m_role;

@@ -26,6 +26,11 @@ private slots:
     void on_btnGenerate_pressed();
     void onGenerateText();
 
+//protected:
+//    void resizeEvent(QResizeEvent *event) override;
+
+    void on_btnGenerate_clicked();
+
 private:
     void initUI();
 

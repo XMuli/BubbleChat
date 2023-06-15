@@ -6,6 +6,7 @@ BubbleHistory::BubbleHistory(QWidget *parent)
     : QListWidget(parent)
 {
     initUI();
+//    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 void BubbleHistory::addBubble(const BubbleParas& paras)
@@ -13,15 +14,16 @@ void BubbleHistory::addBubble(const BubbleParas& paras)
     Bubble *bubble = new Bubble(paras.text, paras.role, paras.time, this);
 
 
-    qDebug () << "addBubble（） -> bubble:" << bubble << "  this:" << this;
+    qDebug () << "addBubble（） -> bubble:" << bubble << "  this:" << this << "  bubble->size():" << bubble->size();
 
     QListWidgetItem *item = new QListWidgetItem(this);
-    item->setSizeHint(bubble->sizeHint());
     addItem(item);
+    item->setSizeHint(bubble->size());
     setItemWidget(item, bubble);
 
     QListWidget::updateGeometry();
     scrollToBottom();
+//    this->adjustSize();
 }
 
 void BubbleHistory::setLastBubbleText(const QString &text, const QDateTime &time)
@@ -43,9 +45,14 @@ void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &t
         addBubble(bubbleParas);
     } else if (bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
         bubble->appendText(text); // update text
+
+        QListWidgetItem* lastItem = item(this->count() - 1);
+        lastItem->setSizeHint(bubble->size());
+        setItemWidget(lastItem, bubble);
     }
 
     QListWidget::updateGeometry();
+//    adjustSize();
     scrollToBottom();
 }
 
@@ -65,6 +72,7 @@ void BubbleHistory::initUI()
 {
     // 设置样式表禁用悬浮高亮效果
 //    setStyleSheet("QListWidget::item:hover { background-color: transparent; }");
-//    resize(1200, 760);
-    setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Minimum);
+    resize(1200, 760);
+
+//    setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Minimum);
 }
