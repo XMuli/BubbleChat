@@ -6,32 +6,24 @@ BubbleHistory::BubbleHistory(QWidget *parent)
     : QListWidget(parent)
 {
     initUI();
-//    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 void BubbleHistory::addBubble(const BubbleParas& paras)
 {
     Bubble *bubble = new Bubble(paras.text, paras.role, paras.time, this);
-
-
     qDebug () << "addBubble（） -> bubble:" << bubble << "  this:" << this << "  bubble->size():" << bubble->size();
-
     QListWidgetItem *item = new QListWidgetItem(this);
     addItem(item);
-    item->setSizeHint(bubble->size());
+    item->setSizeHint(bubble->size());  // 初次添加进来得时候，需要给定一个大小
     setItemWidget(item, bubble);
 
-    QListWidget::updateGeometry();
-    scrollToBottom();
-//    this->adjustSize();
-}
+    connect(bubble, &Bubble::sigChangedHeight, [=](int height){
+        qDebug () << "change height:" << height;
 
-void BubbleHistory::setLastBubbleText(const QString &text, const QDateTime &time)
-{
-    Bubble* bubble = lastBubble();
-    if (!bubble) return;
-
-    bubble->setText(text); // update text
+        QListWidgetItem * lastItemAI = lastListItemAI();
+        if (lastItemAI)
+            lastItemAI->setSizeHint(QSize(bubble->width(), height + 60));
+    });
 }
 
 void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &time)
@@ -45,34 +37,46 @@ void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &t
         addBubble(bubbleParas);
     } else if (bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
         bubble->appendText(text); // update text
-
-        QListWidgetItem* lastItem = item(this->count() - 1);
-        lastItem->setSizeHint(bubble->size());
-        setItemWidget(lastItem, bubble);
     }
 
-    QListWidget::updateGeometry();
-//    adjustSize();
     scrollToBottom();
 }
 
 Bubble *BubbleHistory::lastBubble()
 {
-    // 获取最后一个 QListWidgetItem
-    QListWidgetItem* lastItem = item(this->count() - 1);
-
-    // 将QListWidgetItem转换为ChatBubble*
-    Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem));
-
-    qDebug() << "bubble:" << bubble << "text:" << bubble->text() << "  count():" << count();
+    QListWidgetItem* lastItem = item(this->count() - 1);                 // 获取最后一个 QListWidgetItem
+    Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem)); // 将QListWidgetItem转换为ChatBubble*
     return bubble;
+}
+
+Bubble *BubbleHistory::lastBubbleAI()
+{
+    QListWidgetItem * item = lastListItemAI();
+    return item ? qobject_cast<Bubble *>(itemWidget(item)) : nullptr;
+}
+
+
+QListWidgetItem *BubbleHistory::lastListItemAI()
+{
+    for (int i = this->count() - 1; i >= 0 ; --i) {
+        QListWidgetItem* lastItem = item(i);
+        Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem));
+
+        if (bubble && bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
+            qDebug() << "lastListItemAI:" << bubble << "i:" << i << "text:" << bubble->text() << "  count():" << count();
+            return lastItem;
+        } else {
+            continue;
+        }
+    }
+
+    qDebug() << "lastListItemAI is nullptr";
+    return nullptr;
 }
 
 void BubbleHistory::initUI()
 {
     // 设置样式表禁用悬浮高亮效果
-//    setStyleSheet("QListWidget::item:hover { background-color: transparent; }");
+    //    setStyleSheet("QListWidget::item:hover { background-color: transparent; }");
     resize(1200, 760);
-
-//    setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Minimum);
 }

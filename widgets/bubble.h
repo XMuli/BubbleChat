@@ -27,12 +27,12 @@ struct BubbleParas
     BUBBLE_ROLE role;
 };
 
+
 class Bubble : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Bubble(BUBBLE_ROLE role = BUBBLE_ROLE::BR_AICHAT, QWidget *parent = nullptr);
     explicit Bubble(const QString &text, BUBBLE_ROLE role = BUBBLE_ROLE::BR_AICHAT
                     , const QDateTime &time = QDateTime::currentDateTime(), QWidget *parent = nullptr);
     virtual ~Bubble();
@@ -44,6 +44,9 @@ public:
 
     const QString text();
     BUBBLE_ROLE role() const;
+
+signals:
+    void sigChangedHeight(int);
 
 private:
     void setPhoto();

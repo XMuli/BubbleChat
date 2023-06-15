@@ -7,16 +7,6 @@
 #include <QTextDocument>
 #include <QScrollBar>
 
-Bubble::Bubble(BUBBLE_ROLE role, QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Bubble)
-    , m_role(role)
-
-{
-    ui->setupUi(this);
-    initUI();
-}
-
 Bubble::Bubble(const QString &text, BUBBLE_ROLE role, const QDateTime &time, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Bubble)
@@ -35,42 +25,22 @@ Bubble::~Bubble()
     delete ui;
 }
 
-// 可以优化的点，还可以更加细致的计算
 void Bubble::setText(const QString &text)
 {
-    auto& bubble = ui->browerText;
-    bubble->setText(text);
-
-//    QFontMetricsF fm(this->font());
-//    int maxWidth = bubble->viewport()->width();
-//    qDebug() << "**********1>maxWidth:" << maxWidth;
-//    const QWidget* parent = this->nativeParentWidget();  // 可以调整
-//    if (parent) {
-//        maxWidth = parent->width() - 170;
-//        qDebug() << "**********2>maxWidth:" << maxWidth;
-//    }
-
-//    int allRowCount = 0;
-//    int i = 1;
-//    for (const QString& line : text.split('\n')) {
-//        int lineWidth = fm.horizontalAdvance(line);
-//        int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
-//        allRowCount += realRowCount;
-////        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
-//    }
-
-//    const double lineHeight = fm.lineSpacing();
-//    const QMargins margins(0, 5, 0, 5);
-////    maxWidth + margins.left() + margins.right(),  宽度
-//    bubble->setFixedHeight(lineHeight * allRowCount + margins.top() + margins.bottom());
+    ui->textBrowser->setText(text);
 }
 
+/***********************************************************************************************************
+ui->textBrowser->insertPlainText(text) 追加字符串，不添加换行符; 其高度会触发 ui->textBrowser->document()
+的 QTextDocument::contentsChanged 信号，然后自动将实际 textBrowser 的高度通过信号发射出去，在外面通过设置其承载
+的 “QListWidgetItem 高度 = textBrowser 高度 + 其它控件布局的高度”。
+
+即可以自然而然的得到预期的效果 --->  textBrowser 随着 text 的增加而高度变高，从而使得整个 Bubble 也变高
+************************************************************************************************************/
 void Bubble::appendText(const QString &text)
 {
-    ui->browerText->moveCursor(QTextCursor::End); // 将光标移动到文本末尾
-    ui->browerText->insertPlainText(text); // 追加字符串，不添加换行符
-
-    setText(ui->browerText->toPlainText());  // 自动适配文字行高， 此处还可以优化
+    ui->textBrowser->moveCursor(QTextCursor::End); // 将光标移动到文本末尾
+    ui->textBrowser->insertPlainText(text);        // 追加字符串，不添加换行符
 }
 
 void Bubble::setName(const QString &name)
@@ -79,7 +49,7 @@ void Bubble::setName(const QString &name)
     if (m_role == BUBBLE_ROLE::BR_AICHAT) {
         t = "AI";
     } else {
-        t = name.isEmpty() ? "User" : name;
+        t = name.isEmpty() ? "Venn" : name;
     }
 
     ui->labName->setText(t);
@@ -87,9 +57,7 @@ void Bubble::setName(const QString &name)
 
 void Bubble::setPhoto()
 {
-    auto& labPhoto = ui->labPhoto;/*
-    labPhoto->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);*/
-
+    auto& labPhoto = ui->labPhoto;
     const QString& path = m_role == BUBBLE_ROLE::BR_AICHAT ? ":/resources/avatar/openai.svg" : ":/resources/avatar/avatar.png";
     const QPixmap *pixmap = new QPixmap(path);
     labPhoto->setPixmap(*pixmap);
@@ -103,14 +71,14 @@ void Bubble::setTime(const QDateTime &time)
 
 const QString Bubble::text()
 {
-    return ui->browerText->toPlainText();
+    return ui->textBrowser->toPlainText();
 }
 
 // 根据当前气泡的角色，自动显示顶部右侧的的多个按钮，显隐状态
 void Bubble::autoRoleBtn()
 {
     ui->labStatus->setVisible(false);
-    ui->browerText->setVisible(true);
+    ui->textBrowser->setVisible(true);
 
     if (m_role == BUBBLE_ROLE::BR_ME) {
         ui->tbEditor->setVisible(true);
@@ -127,50 +95,26 @@ void Bubble::autoRoleBtn()
         ui->tbPlayAudio->setVisible(false);
 
         ui->labStatus->setVisible(true);
-        ui->browerText->setVisible(false);
+        ui->textBrowser->setVisible(false);
     }
 }
 
 void Bubble::initUI()
 {
     autoRoleBtn();
-    auto& browerText = ui->browerText;
-    browerText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    browerText->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    browerText->setLineWrapMode(QTextEdit::WidgetWidth);
+    ui->textBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   // 只是不显示，而实际也是存在的，高度得自行计算
+    ui->textBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(browerText->document(), &QTextDocument::contentsChanged, [browerText, this](){
+    // 将文本自动换行以适应QTextBrowser的宽度。当文本的宽度超过控件的宽度时，会自动将文本进行换行显示，以确保文本内容在控件内部完全可见。
+    ui->textBrowser->setLineWrapMode(QTextEdit::WidgetWidth);
+    connect(ui->textBrowser->document(), &QTextDocument::contentsChanged, [=](){
+        const auto& scrollBar = ui->textBrowser->verticalScrollBar();
+        int height = scrollBar->maximum() - scrollBar->minimum() + scrollBar->pageStep();
 
-        const auto& scrollBar = browerText->verticalScrollBar();
-        const auto& text = browerText->document()->toPlainText();
-
-        QFontMetricsF fm(browerText->font());
-        int maxWidth  = browerText->viewport()->width();
-            qDebug() << "**********1>maxWidth:" << maxWidth;
-            const QWidget* parent = this->nativeParentWidget();  // 可以调整
-            if (parent) {
-                maxWidth = parent->width() - 170;
-                qDebug() << "**********2>maxWidth:" << maxWidth;
-            }
-
-            int allRowCount = 0;
-            int i = 1;
-            for (const QString& line : text.split('\n')) {
-                int lineWidth = fm.horizontalAdvance(line);
-                int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
-                allRowCount += realRowCount;
-        //        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
-            }
-
-            const double lineHeight = fm.lineSpacing();
-//            const QMargins margins(0, 5, 0, 5);
-        //    maxWidth + margins.left() + margins.right(),  宽度
-
-        int height = scrollBar->maximum() - scrollBar->minimum() + lineHeight * allRowCount/*scrollBar->pageStep()*/;
-
-        qDebug() << "-----@1---->max:" << scrollBar->maximum() << "  min:" << scrollBar->maximum() << "  pageStep:" << scrollBar->pageStep() << height;
-        ui->browerText->setFixedHeight(height);
-        qDebug() << "-----@2---->browerText size:" << ui->browerText->size() << ui->browerText->document()->toPlainText();
+        // 不能在 Bubble 里面修改高度，必须得在外面修改设置 QListWidgetItem 得高度; 解开注释可查看压缩得效果
+//        ui->textBrowser->setFixedHeight(height);
+//        setFixedHeight(50 + height);
+        emit sigChangedHeight(height);
     });
 
 }
@@ -180,11 +124,14 @@ void Bubble::setWidgetBackgroundColor(QWidget *widget, const QColor &color)
     if (!widget)
         return;
 
+#if 1
     widget->setStyleSheet(QString("background-color: %1;").arg(color.name()));
+#else
 //    QPalette palette = widget->palette();
 //    widget->setAutoFillBackground(true);
 //    palette.setColor(QPalette::Background, color);
 //    widget->setPalette(palette);
+#endif
 
     // 递归设置子控件的背景色
     for (auto& childWidget : widget->findChildren<QWidget *>())

@@ -12,13 +12,11 @@ MainUI::MainUI(QWidget *parent)
     , m_bBubbleDisplay(true)
 {
     ui->setupUi(this);
-
     initUI();
-
-    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
 
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &MainUI::onGenerateText);
+    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
 }
 
 MainUI::~MainUI()
@@ -58,13 +56,9 @@ void MainUI::on_btnGenerate_pressed()
 void MainUI::initUI()
 {
     // 消息记录控件的切换************************************************
-//    m_bubbleHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
     m_bubbleHistory->addBubble(BubbleParas("当然可以！下面是一篇稍长一点的介绍：\n\n人aqwer", BUBBLE_ROLE::BR_AICHAT));
-//    m_bubbleHistory->addBubble(BubbleParas("question", BUBBLE_ROLE::BR_ME));
-//    m_bubbleHistory->addBubble(BubbleParas("哈哈哈，随便写的几个，验证气泡的宽度", BUBBLE_ROLE::BR_AICHAT));
 
-//    m_bubbleHistory->show();
     ui->editChatHistory->show();
 
     if (m_bBubbleDisplay) { // 高级气泡窗口
@@ -87,7 +81,6 @@ void MainUI::initUI()
 
     ui->splitter->setStretchFactor(0, 9);
     ui->splitter->setStretchFactor(1, 2);
-
     resize(1200, 800);
 }
 
@@ -96,7 +89,7 @@ void MainUI::onGenerateText()
     QString characters = "\nABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     QRandomGenerator generator;
     generator.seed(QRandomGenerator::global()->generate());
-    int length = generator.bounded(10, 20); // 生成长度为3到5的随机数
+    int length = generator.bounded(10, 20); // 生成长度为10到20的随机数
     QString randomText;
 
     for (int i = 0; i < length; ++i) {
@@ -104,16 +97,8 @@ void MainUI::onGenerateText()
         QChar randomChar = characters.at(index);
         randomText.append(randomChar);
     }
-//    randomText += "\n";
 
+//    randomText += "\n";
     m_text = randomText;
     m_bubbleHistory->appendLastBubbleText(m_text);
 }
-
-
-
-void MainUI::on_btnGenerate_clicked()
-{
-
-}
-

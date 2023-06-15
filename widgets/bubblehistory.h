@@ -15,12 +15,17 @@ public:
     BubbleHistory(QWidget *parent = nullptr);
 
     void addBubble(const BubbleParas &paras);
-    void setLastBubbleText(const QString &text, const QDateTime &time = QDateTime::currentDateTime());
     void appendLastBubbleText(const QString &text, const QDateTime &time = QDateTime::currentDateTime());
 
+//private slots:
+//    void onBubbleHeightChanged(const int height);
+
 private:
-    Bubble* lastBubble();
+
     void initUI();
+    Bubble* lastBubble();
+    Bubble* lastBubbleAI();
+    QListWidgetItem* lastListItemAI();
 };
 
 #endif // BUBBLEHISTORY_H
