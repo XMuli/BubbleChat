@@ -44,6 +44,9 @@ public:
 
     const QString text();
     BUBBLE_ROLE role() const;
+    const int height() const;
+
+    void printfInfo() const;
 
 signals:
     void sigChangedHeight(int);

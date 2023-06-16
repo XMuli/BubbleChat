@@ -142,3 +142,26 @@ BUBBLE_ROLE Bubble::role() const
 {
     return m_role;
 }
+
+// 初次创建 Bubble对象时，一次性给予所有的文本，其高度给 items 会不对，这里重新计算一下
+const int Bubble::height() const
+{
+    const auto& margin = ui->gridLayout->contentsMargins();
+    const int height = ui->textBrowser->size().height() + ui->labPhoto->size().height()
+                       + margin.top() + margin.bottom() + ui->gridLayout->verticalSpacing();
+
+    qDebug() << "textBrowser:" << ui->textBrowser->size().height() <<  "labPhoto:" << ui->labPhoto->size().height();
+    qDebug() << "margin:" << margin <<  "verticalSpacing:" << ui->gridLayout->verticalSpacing();
+    return height;
+}
+
+void Bubble::printfInfo() const
+{
+    qDebug() << "textBrowser-> size():" << ui->textBrowser->size() <<  "size():" << ui->textBrowser->sizeHint();
+    qDebug() << "this Bubble-> size():" << this->size() <<  "sizeHint():" << this->sizeHint();
+    qDebug() << "labPhoto -> size():" << ui->labPhoto->size() <<  "sizeHint():" << ui->labPhoto->sizeHint();
+    qDebug() << "labName -> size():" << ui->labName->size() <<  "sizeHint():" << ui->labName->sizeHint();
+    qDebug() << "labStatus -> size():" << ui->labStatus->size() <<  "sizeHint():" << ui->labStatus->sizeHint();
+    qDebug() << "tbEditor -> size():" << ui->tbEditor->size() <<  "sizeHint():" << ui->tbEditor->sizeHint();
+
+}
