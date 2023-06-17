@@ -6,6 +6,8 @@
 #include <QTextOption>
 #include <QTextDocument>
 #include <QScrollBar>
+#include <QFontMetricsF>
+#include <QFontMetricsF>
 
 Bubble::Bubble(const QString &text, BUBBLE_ROLE role, const QDateTime &time, QWidget *parent)
     : QWidget(parent)
@@ -108,13 +110,48 @@ void Bubble::initUI()
     // 将文本自动换行以适应QTextBrowser的宽度。当文本的宽度超过控件的宽度时，会自动将文本进行换行显示，以确保文本内容在控件内部完全可见。
     ui->textBrowser->setLineWrapMode(QTextEdit::WidgetWidth);
     connect(ui->textBrowser->document(), &QTextDocument::contentsChanged, [=](){
+
+#if 1
+        // [最终解决方法] 此时 AI Bubble 已经显示出来了，通过已知道的 长度通过 文字的行和高度来重新计算实际高度
+        const auto& textBrowser = ui->textBrowser;
+        const QString& text = textBrowser->toPlainText();
+        int allRowCount = 0;
+        int i = 1;
+
+        QFontMetrics fm(textBrowser->font());
+        int maxWidth = textBrowser->size().width();
+
+        for (const QString& line : text.split('\n')) {
+            int lineWidth = fm.horizontalAdvance(line);
+            int realRowCount = static_cast<int>(lineWidth / maxWidth) + 1;
+            allRowCount += realRowCount;
+            qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
+        }
+
+        int height = allRowCount * fm.lineSpacing();
+#else
+
+        // [其它方法] 通过滚动条来计算还是会有问题的，数值会略偏小
         const auto& scrollBar = ui->textBrowser->verticalScrollBar();
         int height = scrollBar->maximum() - scrollBar->minimum() + scrollBar->pageStep();
+
+        QFontMetrics fm(ui->textBrowser->font());
+
+        qDebug() << "max:" << scrollBar->maximum() << "mix:" << scrollBar->minimum() << "pageStep:" << scrollBar->pageStep()
+                 << "height:" << height << "fm.lineSpacing():" << fm.lineSpacing();
+
+        const auto& textBrowser = ui->textBrowser;
+        qDebug() << ":" << textBrowser->contentsMargins() << textBrowser->document()->documentMargin();
 
         // 不能在 Bubble 里面修改高度，必须得在外面修改设置 QListWidgetItem 得高度; 解开注释可查看压缩得效果
 //        ui->textBrowser->setFixedHeight(height);
 //        setFixedHeight(50 + height);
-        emit sigChangedHeight(height);
+
+#endif
+
+        const auto h1 = textBrowser->contentsMargins().top() * 2;
+        const auto h2 = textBrowser->document()->documentMargin() * 2;
+        emit sigChangedHeight(height + h1 + h2);  // 记得加上间隔
     });
 
 }
@@ -150,9 +187,14 @@ const int Bubble::height() const
     const int height = ui->textBrowser->size().height() + ui->labPhoto->size().height()
                        + margin.top() + margin.bottom() + ui->gridLayout->verticalSpacing();
 
-    qDebug() << "textBrowser:" << ui->textBrowser->size().height() <<  "labPhoto:" << ui->labPhoto->size().height();
-    qDebug() << "margin:" << margin <<  "verticalSpacing:" << ui->gridLayout->verticalSpacing();
+//    qDebug() << "textBrowser:" << ui->textBrowser->size().height() <<  "labPhoto:" << ui->labPhoto->size().height();
+//    qDebug() << "margin:" << margin <<  "verticalSpacing:" << ui->gridLayout->verticalSpacing();
     return height;
+}
+
+const int Bubble::textBrowserheight() const
+{
+    return ui->textBrowser->size().height();
 }
 
 void Bubble::printfInfo() const

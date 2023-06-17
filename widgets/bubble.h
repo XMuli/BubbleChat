@@ -45,6 +45,8 @@ public:
     const QString text();
     BUBBLE_ROLE role() const;
     const int height() const;
+    const int textBrowserheight() const;
+
 
     void printfInfo() const;
 

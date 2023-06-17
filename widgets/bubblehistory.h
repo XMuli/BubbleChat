@@ -25,6 +25,7 @@ private:
     void initUI();
     Bubble* lastBubble();
     Bubble* lastBubbleAI();
+    const int lastBubbleAIHeight(int& itemHeight, int& browserHeight);
     QListWidgetItem* lastListItemAI();
 };
 
