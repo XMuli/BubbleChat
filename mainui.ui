@@ -70,7 +70,7 @@
   <customwidget>
    <class>ChatInputEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>widgets/chatinputedit.h</header>
+   <header>chatinputedit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

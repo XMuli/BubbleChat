@@ -16,7 +16,7 @@ MainUI::MainUI(QWidget *parent)
 
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &MainUI::onGenerateText);
-    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
+//    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
 }
 
 MainUI::~MainUI()

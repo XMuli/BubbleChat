@@ -34,6 +34,8 @@ file(GLOB_RECURSE _source_list LIST_DIRECTORIES false
     "${_src_root_path}/*.cpp"
     "${_src_root_path}/*.h")
 
+include_directories(${PROJECT_SOURCE_DIR}/widgets)  # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败
+
 source_group(TREE ${_src_root_path} FILES ${_source_list})
 
 add_executable(${_PROJECT_NAME}
