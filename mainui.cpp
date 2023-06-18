@@ -16,7 +16,7 @@ MainUI::MainUI(QWidget *parent)
 
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &MainUI::onGenerateText);
-//    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
+    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
 }
 
 MainUI::~MainUI()
@@ -77,7 +77,7 @@ void MainUI::initUI()
 
     ui->btnGenerate->setToolTip("按下自动生成回答，松开停止回答");
     ui->btnSend->setToolTip("松开发送消息；直接在输入框按下回车也直接发送消息");
-    setWindowTitle("Bubble Message Demo");
+    setWindowTitle("Bubble Chat History");
 
     ui->splitter->setStretchFactor(0, 9);
     ui->splitter->setStretchFactor(1, 2);

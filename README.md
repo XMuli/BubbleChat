@@ -1,4 +1,4 @@
-## BubbleMessage
+## Bubble ChatChat
 
 A control for bubble chat window messages created using QListWidget and adapts to the size of the bubble.
 
@@ -94,17 +94,9 @@ Adaptive Size
 
 <br>
 
-## 作者
-
-[![alt text](https://img.shields.io/badge/QQ-%E5%81%95%E8%87%A7-brightgreen)](https://sighttp.qq.com/authd?IDKEY=31f3ef7312b39e2c8dc822ae2f4c3b3118e1a6f31cc83373) : 直接和我聊天~   |   [![alt text](https://img.shields.io/badge/GitHub-XMuli-brightgreen)](https://github.com/XMuli) : 查看我的主页   |   [![alt text](https://img.shields.io/badge/Blog-%E5%81%95%E8%87%A7%E7%9A%84%E5%B0%8F%E7%AB%99-ff69b4)](https://ifmet.cn/) : 好奇我的小窝 
-
-<br>
-
-## 贡献者
+## 贡献
 
 若是帮助到了你，或者觉得有用，<font color=#FE7207  size=4 face="幼圆">可以点击该项目的的 <font color=#D0087E size=4 face="幼圆">**⭐Star** </font>和<font color=#D0087E size=4 face="幼圆">**🍴 Fork**</font> 的两个图标，方便抬手之间，表示点个赞，手有余香，</font>其次才是一份冰的肥宅快乐水。
-
-<br>
 
 <details>
     <summary> 当然也可以赠与一杯冰阔落[捐赠/打赏  ← 点击展开二维码]</summary>

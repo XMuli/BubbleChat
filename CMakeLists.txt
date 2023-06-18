@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(_PROJECT_NAME BubbleMessage)
+set(_PROJECT_NAME BubbleChat)
 project(${_PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
