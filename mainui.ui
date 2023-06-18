@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/resources/logo.svg</normaloff>:/resources/logo.svg</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -69,6 +73,8 @@
    <header>widgets/chatinputedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

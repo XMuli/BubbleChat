@@ -84,17 +84,17 @@ void Bubble::autoRoleBtn()
 
     if (m_role == BUBBLE_ROLE::BR_ME) {
         ui->tbEditor->setVisible(true);
-        ui->tbStopGenerate->setVisible(false);
-        ui->tbPlayAudio->setVisible(false);
+        ui->tbBot->setVisible(false);
+        ui->tbLove->setVisible(false);
 //        setWidgetBackgroundColor(this, QColor("#e9e9e8"));
     } else if (m_role == BUBBLE_ROLE::BR_AICHAT) {
         ui->tbEditor->setVisible(false);
-        ui->tbStopGenerate->setVisible(true);
-        ui->tbPlayAudio->setVisible(true);
+        ui->tbBot->setVisible(true);
+        ui->tbLove->setVisible(true);
     } else if (m_role == BUBBLE_ROLE::BR_STATUS) {
         ui->tbEditor->setVisible(false);
-        ui->tbStopGenerate->setVisible(false);
-        ui->tbPlayAudio->setVisible(false);
+        ui->tbBot->setVisible(false);
+        ui->tbLove->setVisible(false);
 
         ui->labStatus->setVisible(true);
         ui->textBrowser->setVisible(false);
