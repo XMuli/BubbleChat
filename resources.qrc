@@ -10,5 +10,10 @@
         <file>resources/icons/stop_generate_red.svg</file>
         <file>resources/icons/speaker.svg</file>
         <file>resources/avatar/avatar.png</file>
+        <file>resources/logo.svg</file>
+        <file>resources/icons/love.svg</file>
+        <file>resources/icons/copy.svg</file>
+        <file>resources/icons/speech_black.svg</file>
+        <file>resources/icons/speech_red.svg</file>
     </qresource>
 </RCC>

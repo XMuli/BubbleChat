@@ -155,7 +155,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="tbStopGenerate">
+          <widget class="QToolButton" name="tbBot">
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -164,12 +164,12 @@
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
-             <normaloff>:/resources/icons/stop_generate_red.svg</normaloff>:/resources/icons/stop_generate_red.svg</iconset>
+             <normaloff>:/resources/icons/love.svg</normaloff>:/resources/icons/love.svg</iconset>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="tbPlayAudio">
+          <widget class="QToolButton" name="tbLove">
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -178,7 +178,7 @@
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
-             <normaloff>:/resources/icons/speaker.svg</normaloff>:/resources/icons/speaker.svg</iconset>
+             <normaloff>:/resources/icons/copy.svg</normaloff>:/resources/icons/copy.svg</iconset>
            </property>
           </widget>
          </item>
