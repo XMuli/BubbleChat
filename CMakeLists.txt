@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
-
-project(BubbleMessage VERSION 0.1 LANGUAGES CXX)
+set(_PROJECT_NAME BubbleMessage)
+project(${_PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -13,15 +13,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-
-
     widgets/chatinputedit.h
     widgets/chatinputedit.cpp
-#    widgets/chatbubble.h
-#    widgets/chatbubble.cpp
-#    widgets/chatbubble.ui
-#    widgets/chathistory.h
-#    widgets/chathistory.cpp
 
     widgets/bubble.h
     widgets/bubble.cpp
@@ -33,7 +26,6 @@ set(PROJECT_SOURCES
     mainui.h
     mainui.cpp
     mainui.ui
-
     resources.qrc
 )
 
@@ -44,14 +36,14 @@ file(GLOB_RECURSE _source_list LIST_DIRECTORIES false
 
 source_group(TREE ${_src_root_path} FILES ${_source_list})
 
-add_executable(BubbleDemo
+add_executable(${_PROJECT_NAME}
     ${PROJECT_SOURCES}
 )
 
-target_link_libraries(BubbleDemo PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(BubbleDemo PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+set_target_properties(${_PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER https://github.com/XMuli
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
@@ -75,7 +67,7 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
     add_compile_options(/source-charset:utf-8 /execution-charset:utf-8)
 endif()
-install(TARGETS BubbleDemo
+install(TARGETS ${_PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
