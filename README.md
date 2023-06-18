@@ -1,3 +1,27 @@
+## BubbleMessage
+
+A control for bubble chat window messages created using QListWidget and adapts to the size of the bubble.
+
+Adaptive Size
+- Bubble messages append text content and the height is automatically recalculated
+- Stretch to change the size of the main window, the width and height are automatically recalculated
+
+
+
+使用 QListWidget 创建的一个 气泡聊天窗口消息的控件，并且可以自适应气泡的大小。
+
+自适应大小
+- 气泡消息追加文本内容，高度会自动重新计算
+- 拉伸改变主窗口的大小，宽度和高度会自动重新计算
+
+
+
+## 演示效果
+
+<img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2023/demonstrate.gif" width="100%"/>
+
+
+
 
 
 ##### 【本质问题】
@@ -65,3 +89,31 @@
 ##### 【解决方案】
 
 当 Bubble 追加文字时候，此时属于已经显示出来，已可以获取其实际宽和高，然后通过 “尝试的方法二” 来计算里面详细的高度，然后结合 （Bubble - textBrowser） 的高度，**在外面重新设置 QListWidgetItem 的高度**， 最终，完美显示效果
+
+
+
+<br>
+
+## 作者
+
+[![alt text](https://img.shields.io/badge/QQ-%E5%81%95%E8%87%A7-brightgreen)](https://sighttp.qq.com/authd?IDKEY=31f3ef7312b39e2c8dc822ae2f4c3b3118e1a6f31cc83373) : 直接和我聊天~   |   [![alt text](https://img.shields.io/badge/GitHub-XMuli-brightgreen)](https://github.com/XMuli) : 查看我的主页   |   [![alt text](https://img.shields.io/badge/Blog-%E5%81%95%E8%87%A7%E7%9A%84%E5%B0%8F%E7%AB%99-ff69b4)](https://ifmet.cn/) : 好奇我的小窝 
+
+<br>
+
+## 贡献者
+
+若是帮助到了你，或者觉得有用，<font color=#FE7207  size=4 face="幼圆">可以点击该项目的的 <font color=#D0087E size=4 face="幼圆">**⭐Star** </font>和<font color=#D0087E size=4 face="幼圆">**🍴 Fork**</font> 的两个图标，方便抬手之间，表示点个赞，手有余香，</font>其次才是一份冰的肥宅快乐水。
+
+<br>
+
+<details>
+    <summary> 当然也可以赠与一杯冰阔落[捐赠/打赏  ← 点击展开二维码]</summary>
+  <p> - 若是此项目帮助到了你，或者觉得有用，或是想帮助此项目的发展，你也能够邀请我喝一杯杯肥仔快乐水。 - </p>
+  <pre><img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2022/202302282339037.png" width="80%"/></pre>
+</details>
+
+<br>
+
+## 系列
+
+[QtExamples](https://github.com/XMuli/QtExamples)     欢迎 `star` ⭐ 和 `fork` 🍴这个系列的 `C++ / QT / DTK` 学习，附学习由浅入深的目录
