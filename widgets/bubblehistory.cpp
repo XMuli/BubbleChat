@@ -20,7 +20,7 @@ void BubbleHistory::addBubble(const BubbleParas& paras)
 //    const QSize size(bubble->size().width(),  bubbleHeight);
     item->setSizeHint(QSize(bubble->size().width(), bubble->size().height()));  // 初次添加进来得时候，需要给定一个大小，此处不能参考下面赋值 item->sizeHint()，一样会有问题
     setItemWidget(item, bubble);
-    bubble->show();
+//    bubble->show();
 
     connect(bubble, &Bubble::sigChangedHeight, [=](int height){
         // 拉升整体窗口大小时候，效果会更好 比起此处使用 QSize(bubble->width(), height + 60) 赋值; 60 为头像等其 Bubble 里面其它的控件的高度，如何计算出来？

@@ -5,7 +5,7 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
-#include "widgets/bubble.h"
+#include "widgets/chatinputedit.h"
 #include "widgets/bubblehistory.h"
 
 namespace Ui {
@@ -21,6 +21,7 @@ public:
     ~MainUI();
 
 private slots:
+    void onCustomKeyBtnReleased(const CustomKey& customKey);
     void on_btnSend_released();
     void on_btnGenerate_released();
     void on_btnGenerate_pressed();

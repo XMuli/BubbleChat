@@ -3,6 +3,11 @@
 
 #include <QPlainTextEdit>
 
+enum class CustomKey {
+    CK_EnterSend,   // 忽略回车，发送消息
+    CK_CRLF           // carriage return/line feed 回车换行
+};
+
 class ChatInputEdit : public QPlainTextEdit
 {
     Q_OBJECT
@@ -13,7 +18,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 signals:
-    void sigSendBtnReleased();
+    void sigCustomKeyBtnReleased(const CustomKey& customKey);
 };
 
 

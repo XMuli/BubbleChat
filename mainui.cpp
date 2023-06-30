@@ -16,12 +16,21 @@ MainUI::MainUI(QWidget *parent)
 
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &MainUI::onGenerateText);
-    connect(ui->editChatInput, &ChatInputEdit::sigSendBtnReleased, this, &MainUI::on_btnSend_released);
+    connect(ui->editChatInput, &ChatInputEdit::sigCustomKeyBtnReleased, this, &MainUI::onCustomKeyBtnReleased);
 }
 
 MainUI::~MainUI()
 {
     delete ui;
+}
+
+void MainUI::onCustomKeyBtnReleased(const CustomKey &customKey)
+{
+    if (customKey == CustomKey::CK_EnterSend) {
+        on_btnSend_released();
+    } else if (customKey == CustomKey::CK_CRLF) {
+        // 什么都不做，即会自动添加换行的
+    }
 }
 
 void MainUI::on_btnSend_released()

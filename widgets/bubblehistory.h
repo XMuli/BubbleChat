@@ -24,8 +24,8 @@ private:
 
     void initUI();
     Bubble* lastBubble(BUBBLE_ROLE role);  // 指定最后一个 ME， 或者最后一个 AIChat
-    const int lastBubbleHeight(BUBBLE_ROLE role, int& itemHeight, int& browserHeight);
     QListWidgetItem* lastListItem(BUBBLE_ROLE role);
+    const int lastBubbleHeight(BUBBLE_ROLE role, int& itemHeight, int& browserHeight);
 };
 
 #endif // BUBBLEHISTORY_H
