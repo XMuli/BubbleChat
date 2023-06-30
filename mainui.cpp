@@ -100,5 +100,5 @@ void MainUI::onGenerateText()
 
 //    randomText += "\n";
     m_text = randomText;
-    m_bubbleHistory->appendLastBubbleText(m_text);
+    m_bubbleHistory->appendLastBubbleText(BUBBLE_ROLE::BR_AICHAT, m_text);
 }

@@ -15,7 +15,7 @@ public:
     BubbleHistory(QWidget *parent = nullptr);
 
     void addBubble(const BubbleParas &paras);
-    void appendLastBubbleText(const QString &text, const QDateTime &time = QDateTime::currentDateTime());
+    void appendLastBubbleText(const BUBBLE_ROLE role, const QString &text, const QDateTime &time = QDateTime::currentDateTime());
 
 //private slots:
 //    void onBubbleHeightChanged(const int height);
@@ -23,10 +23,9 @@ public:
 private:
 
     void initUI();
-    Bubble* lastBubble();
-    Bubble* lastBubbleAI();
-    const int lastBubbleAIHeight(int& itemHeight, int& browserHeight);
-    QListWidgetItem* lastListItemAI();
+    Bubble* lastBubble(BUBBLE_ROLE role);  // 指定最后一个 ME， 或者最后一个 AIChat
+    const int lastBubbleHeight(BUBBLE_ROLE role, int& itemHeight, int& browserHeight);
+    QListWidgetItem* lastListItem(BUBBLE_ROLE role);
 };
 
 #endif // BUBBLEHISTORY_H

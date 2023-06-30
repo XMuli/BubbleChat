@@ -1,5 +1,6 @@
 ﻿#include "bubblehistory.h"
 #include <QListWidgetItem>
+#include <QTimer>
 #include <QDebug>
 
 BubbleHistory::BubbleHistory(QWidget *parent)
@@ -8,46 +9,52 @@ BubbleHistory::BubbleHistory(QWidget *parent)
     initUI();
 }
 
+// 创建一个文本为空的 气泡控件，先显示出来，然后再使用追加文字的方式计算宽和高度
 void BubbleHistory::addBubble(const BubbleParas& paras)
 {
-    Bubble *bubble = new Bubble(paras.text, paras.role, paras.time, this);
-    qDebug () << "addBubble（） -> bubble:" << bubble << "  this:" << this << "  bubble->size():" << bubble->size();
+    Bubble *bubble = new Bubble("", paras.role, paras.time, this);
     QListWidgetItem *item = new QListWidgetItem(this);
     addItem(item);
-//    qDebug() << "---bubble->size():" << bubble->size() << "bubble->height():" << bubble->height();
-//    bubble->printfInfo();
 
     const int& bubbleHeight = paras.role ==BUBBLE_ROLE::BR_ME ? bubble->height() : bubble->size().height();
 //    const QSize size(bubble->size().width(),  bubbleHeight);
-    item->setSizeHint(QSize(bubble->size().width(),  bubble->height()));  // 初次添加进来得时候，需要给定一个大小，此处不能参考下面赋值 item->sizeHint()，一样会有问题
+    item->setSizeHint(QSize(bubble->size().width(), bubble->size().height()));  // 初次添加进来得时候，需要给定一个大小，此处不能参考下面赋值 item->sizeHint()，一样会有问题
     setItemWidget(item, bubble);
-
-//    qDebug() << "---bubble2->size():" << bubble->size() << "bubble->height():" << bubble->height();
-//    bubble->printfInfo();
+    bubble->show();
 
     connect(bubble, &Bubble::sigChangedHeight, [=](int height){
-//        qDebug () << "change height:" << height;
-
         // 拉升整体窗口大小时候，效果会更好 比起此处使用 QSize(bubble->width(), height + 60) 赋值; 60 为头像等其 Bubble 里面其它的控件的高度，如何计算出来？
 
         int itemHeight;
         int browserHeight;
-        int ResidualHeight = lastBubbleAIHeight(itemHeight, browserHeight);
+        const auto& role = bubble->role();
+        int ResidualHeight = lastBubbleHeight(role, itemHeight, browserHeight);
         qDebug() << "change height:" << height << bubble->textBrowserheight() << bubble->size() << "bubble->height():" << bubble->height();
-        QListWidgetItem * lastItemAI = lastListItemAI();
+        QListWidgetItem * lastItem = lastListItem(role);
 
         qDebug() << "--@2->" <<itemHeight << browserHeight << ResidualHeight << bubble->isVisible();
-        if (lastItemAI) lastItemAI->setSizeHint(QSize(lastItemAI->sizeHint().width(), height + ResidualHeight));  // 通过 UI Design 计算和 直接相减，理论都应该是 48， 莫非是 48 * 此屏幕的缩放比？？
+        if (lastItem) lastItem->setSizeHint(QSize(lastItem->sizeHint().width(), height + ResidualHeight));  // 通过 UI Design 计算和 直接相减，理论都应该是 48， 莫非是 48 * 此屏幕的缩放比？？
     });
+
+    if (!paras.text.isEmpty()) // fix: Me 气泡创建时候，先创建一个空白气泡，此时立即 追加文字 时刻，此刻此 item 还没有显示，故计算是错误的
+        QTimer::singleShot(10, [bubble, paras]() { bubble->appendText(paras.text); });
+
+
+    qDebug () << "addBubble() 结束位置打印 -> bubble:" << bubble << "  this:" << this << "  bubble->size():" << bubble->size()
+             << "paras.text:" << paras.text << "isVisible:" << isVisible();
 }
 
-void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &time)
+void BubbleHistory::appendLastBubbleText(const BUBBLE_ROLE role, const QString &text, const QDateTime &time)
 {
-    Bubble* bubble = lastBubble();
+    // 返回已存在的最后一个，不管是 ME 还是 AIChat 均返回
+    QListWidgetItem* lastItem = item(this->count() - 1);
+    Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem));
     if (!bubble) return;
 
-    if (bubble->role() == BUBBLE_ROLE::BR_ME) {
-        // 不存在则先创建 BR_AICHAT 的气泡
+    qDebug () << "appendLastBubbleText() 开始位置打印 -> bubble:" << bubble << "  this:" << this << "  bubble->size():" << bubble->size()
+             << "text:" << text << "isVisible:" << isVisible();
+
+    if (bubble->role() == BUBBLE_ROLE::BR_ME) {  // 不存在则先创建 BR_AICHAT 的气泡
         BubbleParas bubbleParas(text, BUBBLE_ROLE::BR_AICHAT);
         addBubble(bubbleParas);
     } else if (bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
@@ -57,46 +64,40 @@ void BubbleHistory::appendLastBubbleText(const QString &text, const QDateTime &t
     scrollToBottom();
 }
 
-Bubble *BubbleHistory::lastBubble()
+Bubble *BubbleHistory::lastBubble(BUBBLE_ROLE role)
 {
-    QListWidgetItem* lastItem = item(this->count() - 1);                 // 获取最后一个 QListWidgetItem
-    Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem)); // 将QListWidgetItem转换为ChatBubble*
-    return bubble;
-}
-
-Bubble *BubbleHistory::lastBubbleAI()
-{
-    QListWidgetItem * item = lastListItemAI();
+    QListWidgetItem* item = lastListItem(role);
     return item ? qobject_cast<Bubble *>(itemWidget(item)) : nullptr;
 }
 
-const int BubbleHistory::lastBubbleAIHeight(int &itemHeight, int &browserHeight)
+const int BubbleHistory::lastBubbleHeight(BUBBLE_ROLE role, int &itemHeight, int &browserHeight)
 {
-    const auto& bubble = lastBubbleAI();
+    const auto& bubble = lastBubble(role);
     if (!bubble) return 0;
 
     itemHeight = bubble->size().height();
     browserHeight = bubble->textBrowserheight();
-    qDebug() << "--@1->" <<bubble->size() << browserHeight << itemHeight - browserHeight << bubble->isVisible();
+    qDebug() << "--@1->role:" << int(role) << bubble->size() << browserHeight << itemHeight - browserHeight << bubble->isVisible();
     return itemHeight - browserHeight;
 }
 
 
-QListWidgetItem *BubbleHistory::lastListItemAI()
+QListWidgetItem *BubbleHistory::lastListItem(BUBBLE_ROLE role)
 {
     for (int i = this->count() - 1; i >= 0 ; --i) {
         QListWidgetItem* lastItem = item(i);
         Bubble* bubble = qobject_cast<Bubble *>(this->itemWidget(lastItem));
+        if (!bubble) return nullptr;
 
-        if (bubble && bubble->role() == BUBBLE_ROLE::BR_AICHAT) {
-            qDebug() << "lastListItemAI:" << bubble << "i:" << i << "text:" << bubble->text() << "  count():" << count();
+        if (bubble->role() == role) {
+            qDebug() << "lastListItem:" << bubble << "i:" << i << "text:" << "  count():" << count() << bubble->text();
             return lastItem;
         } else {
             continue;
         }
     }
 
-    qDebug() << "lastListItemAI is nullptr";
+    qDebug() << "lastListItem is nullptr";
     return nullptr;
 }
 

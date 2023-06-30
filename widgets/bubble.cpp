@@ -112,7 +112,7 @@ void Bubble::initUI()
     connect(ui->textBrowser->document(), &QTextDocument::contentsChanged, [=](){
 
 #if 1
-        // [最终解决方法] 此时 AI Bubble 已经显示出来了，通过已知道的 长度通过 文字的行和高度来重新计算实际高度
+        // [最终解决方法] 此时 AI 和 ME Bubble 已经显示出来了，通过已知道的 长度通过 文字的行和高度来重新计算实际高度
         const auto& textBrowser = ui->textBrowser;
         const QString& text = textBrowser->toPlainText();
         int allRowCount = 0;
@@ -128,6 +128,7 @@ void Bubble::initUI()
             qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
         }
 
+        if (text.isEmpty()) allRowCount = 0;  // 文本为空是 0 行
         int height = allRowCount * fm.lineSpacing();
 #else
 
