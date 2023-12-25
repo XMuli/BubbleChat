@@ -83,6 +83,12 @@ Adaptive Size
    ui->textBrowser->setFixedHeight(document->size().height()+20);
    emit sigChangedHeight(ui->textBrowser->height()+56);
    ```
+   
+   
+   
+4. 记得有一个函数，是可以刷新出尺寸，但是窗体不显示；实现起来更加优雅；函数名忘记没找到
+
+   
 
 
 
