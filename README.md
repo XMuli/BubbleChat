@@ -1,3 +1,17 @@
+<div align="center">
+  <p>
+    <br/>
+    <h1>BubbleChat</h1>
+    <h4>A bubble chat message display that is adaptive in size</h4>
+    <h4>气泡聊天的消息展示的效果，且自适应大小</h4>
+  </p>
+</div>
+<div align="center">
+  <p align="right"><br><a href="https://thinkymate.xmuli.tech/">English</a> | <a href="https://github.com/XMuli/BubbleChat/blob/master/README.zh_CN.md">简体中文</a></p>
+</div>
+
+
+
 ## Bubble ChatChat
 
 A control for bubble chat window messages created using QListWidget and adapts to the size of the bubble.
@@ -8,15 +22,16 @@ Adaptive Size
 
 
 
-使用 QListWidget 创建的一个 气泡聊天窗口消息的控件，并且可以自适应气泡的大小。
+A bubble chat window message control created with QListWidget and with the ability to adapt the size of the bubbles.
 
-自适应大小
-- 气泡消息追加文本内容，高度会自动重新计算
-- 拉伸改变主窗口的大小，宽度和高度会自动重新计算
+Adaptive size
+
+- Add text to the bubble message, the height will be automatically recalculated.
+- Stretch to change the size of the main window, the width and height will be automatically recalculated.
 
 
 
-## 演示效果
+## Demonstration effect
 
 <img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2023/demonstrate.gif" width="100%"/>
 
@@ -24,32 +39,29 @@ Adaptive Size
 
 
 
-##### 【本质问题】
+##### [Fundamental Issue]
 
-如何通计算去掉那个魔数字，优雅和完美显示；
+How to eliminate that magic number through calculation for an elegant and perfect display;
 
+- Whether adding that magic number in BubbleHistory::addBubble or in Bubble::initUI(), essentially there is no difference between the two.
+- Changed the connection from
+   `connect(ui->textBrowser->document(), &QTextDocument::contentsChanged`
+   to
+   `connect(ui->textBrowser, &QTextBrowser::textChanged`
+   so that even the initial assignment can be captured.
 
-   - 在那个 魔数 在 BubbleHistory::addBubble 里添加，或 Bubble::initUI()  里面添加；这两个本质没有任何区别
-   - connect(ui->textBrowser->document(), &QTextDocument::contentsChanged 改为后者了
-      connect(ui->textBrowser, &QTextBrowser::textChanged =》 属于初次赋值也可获取到
+##### [Existing Three Approaches]
 
+**Background**: Before the textBrowser/Bubble is displayed, we need to obtain its height; there are three approaches to calculating the height.
 
-
-##### 【已有三种尝试】
-
-​     **背景**：- 在 textBrowser/Bubble 还没显示时候，就需要够获取高度；计算高度的三种方思路
-​	 
-
-1. 通过滚动条来获取；但是一行的数值应该为 24 左右，而这里实际为 10，所需要添加一个魔术
+1. Obtain it through the scrollbar; however, a single line’s value should be around 24, but here it is actually 10, thus requiring a magic number adjustment.
 
    ```cpp
    const auto& scrollBar = ui->textBrowser->verticalScrollBar();
    int height = scrollBar->maximum() - scrollBar->minimum() + scrollBar->pageStep();
    ```
 
-
-
-2. 通过此时已知道文本的 text ， 通过 QFontMetrics 来获取 总的字符串的宽度（长），除以 一行能够显示的长度（未知，痛点无法知道），进而得到行数，再乘以  fm.lineSpacing() 获取真实的高度。**如果此时此控件已经显示出来，此则是最好的显示方案**
+2. Given that the text is already known at this point, we can use QFontMetrics to obtain the total width of the string, divide it by the width that can be displayed in a single line (which is unknown—a pain point), thereby determining the number of lines, and then multiply by fm.lineSpacing() to get the actual height. **If the control is already displayed at that point, this is the best display solution.**
 
    ```cpp
    const auto& textBrowser = ui->textBrowser;
@@ -67,9 +79,9 @@ Adaptive Size
        qDebug() << "i:" << i++ << "  lineWidth:" << lineWidth <<"  realRowCount:" << realRowCount << "  allRowCount:" << allRowCount << "  line:" << line;
    }
    
-   int height = allRowCount * fm.lineSpacing();  // 最佳的实际行高
+   int height = allRowCount * fm.lineSpacing();  // Optimum practical row height
    
-   // 若是 QTextBrower 之类，记得加上 margins 这中的间隔
+   // If it's a QTextBrower or something like that, remember to add the margins.
    // const auto h1 = textBrowser->contentsMargins().top() * 2;
    // const auto h2 = textBrowser->document()->documentMargin() * 2;
    // height = height + h1 + h2；
@@ -77,7 +89,7 @@ Adaptive Size
 
 
 
-3. 通过 textBrowser->document()->size() 作为实际的高度，这里面的 document->size()实际也是偏小，还一开始是 0；
+3. With textBrowser->document()->size() as the actual height, the document->size() in this is actually on the small side as well, and also starts out at 0;
 
    ```cpp
    ui->textBrowser->setFixedHeight(document->size().height()+20);
@@ -86,32 +98,55 @@ Adaptive Size
    
    
    
-4. 记得有一个函数，是可以刷新出尺寸，但是窗体不显示；实现起来更加优雅；函数名忘记没找到
+4. Remember that there is a function that can refresh the size, but the form does not display; the implementation of a more elegant; function name forgotten not found
 
    
 
 
 
-##### 【解决方案】
+##### [Solution]
 
-当 Bubble 追加文字时候，此时属于已经显示出来，已可以获取其实际宽和高，然后通过 “尝试的方法二” 来计算里面详细的高度，然后结合 （Bubble - textBrowser） 的高度，**在外面重新设置 QListWidgetItem 的高度**， 最终，完美显示效果
+When Bubble append text, at this time belongs to the already displayed, you can get its actual width and height, and then through the “tried and true method two” to calculate the height of the inside details, and then combined with the height of the (Bubble - textBrowser), ** reset the height of the outside of the QListWidgetItem's height **, finally, perfect display effect!
+
+
+
+## Who uses this program?
+
+> [http://thinkymate.xmuli.tech/](http://thinkymate.xmuli.tech/)
+
+
+
+<div align="center">
+  <p>
+      <h1>
+      <a href="https://thinkymate.xmuli.tech">
+          <img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2023/202312180312618.png" width="100%" alt="ThinkyMate"/>
+      </a>
+    </h1>
+    <br/>
+    <h4>Simple and easy to use desktop application for ChatGPT & AI</h4>
+    <h4>简洁且易用的 ChatGPT & AI 的桌面应用程序</h4>
+    <h4>簡潔且易用的 ChatGPT & AI 的桌面應用程序</h4>
+  </p>
+</div>
+<div align="center">
+  <p align="right"><br><a href="https://thinkymate.xmuli.tech/">English</a> | <a href="https://github.com/XMuli/ThinkyMate/blob/master/docs/index.zh_CN.md">简体中文</a></p>
+</div>
+
 
 
 
 <br>
 
-## 贡献
+## Contribution
 
-若是帮助到了你，或者觉得有用，<font color=#FE7207  size=4 face="幼圆">可以点击该项目的的 <font color=#D0087E size=4 face="幼圆">**⭐Star** </font>和<font color=#D0087E size=4 face="幼圆">**🍴 Fork**</font> 的两个图标，方便抬手之间，表示点个赞，手有余香，</font>其次才是一份冰的肥宅快乐水。
+If this has helped you or you find it useful, please consider clicking the **⭐ Star** and **🍴 Fork** icons of this project to show your support with a simple gesture. It’s a small way to leave a positive impression—and then, why not enjoy an iced can of your favorite soda?
 
-<details>
-    <summary> 当然也可以赠与一杯冰阔落[捐赠/打赏  ← 点击展开二维码]</summary>
-  <p> - 若是此项目帮助到了你，或者觉得有用，或是想帮助此项目的发展，你也能够邀请我喝一杯杯肥仔快乐水。 - </p>
-  <pre><img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2022/202302282339037.png" width="80%"/></pre>
-</details>
+
+
 
 <br>
 
-## 系列
+## Tutorial Series
 
-[QtExamples](https://github.com/XMuli/QtExamples)     欢迎 `star` ⭐ 和 `fork` 🍴这个系列的 `C++ / QT / DTK` 学习，附学习由浅入深的目录
+[QtExamples](https://github.com/XMuli/QtExamples)     Welcome `star` ⭐ and `fork` 🍴 to this series of `C++ / QT / DTK` studies, with a catalog of studies from the beginning to the end!
