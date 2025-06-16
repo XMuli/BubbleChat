@@ -1,5 +1,7 @@
-﻿#include "chatinputedit.h"
-
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#include "chatinputedit.h"
 #include <QDebug>
 
 ChatInputEdit::ChatInputEdit(QWidget *parent)

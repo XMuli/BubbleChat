@@ -1,4 +1,7 @@
-﻿#include "mainui.h"
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#include "mainui.h"
 #include "ui_mainui.h"
 #include <QDebug>
 #include <QChar>

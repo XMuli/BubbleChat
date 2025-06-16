@@ -1,4 +1,7 @@
-﻿#ifndef CHATINPUTEDIT_H
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#ifndef CHATINPUTEDIT_H
 #define CHATINPUTEDIT_H
 
 #include <QPlainTextEdit>

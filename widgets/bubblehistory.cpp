@@ -1,4 +1,7 @@
-﻿#include "bubblehistory.h"
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#include "bubblehistory.h"
 #include <QListWidgetItem>
 #include <QTimer>
 #include <QDebug>

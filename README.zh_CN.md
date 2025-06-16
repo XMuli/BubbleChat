@@ -11,6 +11,10 @@
 </div>
 
 
+> **本项目已收录于** [Product](https://product.xmuli.tech/)
+
+
+
 
 ## Bubble ChatChat
 

@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.5)
+# SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+# SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+# SPDX-License-Identifier: MIT
+
+cmake_minimum_required(VERSION 3.20)
 set(_PROJECT_NAME BubbleChat)
-project(${_PROJECT_NAME} VERSION 1.2 LANGUAGES CXX)
+project(${_PROJECT_NAME} VERSION 2.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -75,6 +79,6 @@ install(TARGETS ${_PROJECT_NAME}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(BubbleDemo)
-endif()
+# if(QT_VERSION_MAJOR EQUAL 6)
+    # qt_finalize_executable(BubbleDemo)
+# endif()

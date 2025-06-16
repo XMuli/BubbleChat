@@ -1,4 +1,7 @@
-﻿#ifndef BUBBLEHISTORY_H
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#ifndef BUBBLEHISTORY_H
 #define BUBBLEHISTORY_H
 
 #include <QListWidget>

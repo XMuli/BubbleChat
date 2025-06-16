@@ -1,4 +1,7 @@
-﻿#ifndef BUBBLE_H
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#ifndef BUBBLE_H
 #define BUBBLE_H
 
 #include <QWidget>

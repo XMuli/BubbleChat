@@ -1,4 +1,7 @@
-﻿#include "bubble.h"
+﻿// SPDX-SnippetCopyrightText: 2023-2025 Wengeng Zhang
+// SPDX-Author: Wengeng Zhang <xmulitech@gmail.com>
+// SPDX-License-Identifier: MIT
+#include "bubble.h"
 #include "ui_bubble.h"
 #include <QDebug>
 #include <QPalette>
